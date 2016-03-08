@@ -4274,7 +4274,7 @@ ngx_http_upstream_check_init_shm(ngx_conf_t *cf, void *conf)
                                 ngx_http_upstream_check_shm_generation);
 
     /* The default check shared memory size is 1M */
-    shm_size = 1 * 1024 * 1024;
+    shm_size = 1 * 1024 * 1024 + ngx_pagesize;
 
     shm_size = shm_size < ucmcf->check_shm_size ?
                           ucmcf->check_shm_size : shm_size;
