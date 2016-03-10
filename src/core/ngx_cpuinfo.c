@@ -127,6 +127,21 @@ ngx_cpuinfo(void)
     }
 }
 
+#elif defined(__aarch64__)
+
+void
+ngx_cpuinfo(void)
+{
+  uint64_t ctr_el0;
+  uint64_t erg;
+  asm("mrs %0, ctr_el0" : "=r"(ctr_el0));
+  erg = (ctr_el0 >> 20) & 0xf;
+  if (erg == 0)
+    ngx_cacheline_size = 4 * 512;
+  else
+    ngx_cacheline_size = 4 << erg;
+}
+
 #else
 
 
