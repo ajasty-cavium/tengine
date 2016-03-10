@@ -7,7 +7,7 @@
 
 #include <ngx_config.h>
 #include <ngx_core.h>
-
+#include <ngx_crc32.h>
 
 #if (( __i386__ || __amd64__ ) && ( __GNUC__ || __INTEL_COMPILER ))
 
@@ -129,11 +129,17 @@ ngx_cpuinfo(void)
 
 #elif defined(__aarch64__)
 
+#include <sys/auxv.h>
+#include <asm/hwcap.h>
+
 void
 ngx_cpuinfo(void)
 {
   uint64_t ctr_el0;
   uint64_t erg;
+  unsigned long auxv = getauxval(AT_HWCAP);
+  ngx_crc32_use_hw = (auxv & HWCAP_CRC32) ? 1 : 0;
+
   asm("mrs %0, ctr_el0" : "=r"(ctr_el0));
   erg = (ctr_el0 >> 20) & 0xf;
   if (erg == 0)

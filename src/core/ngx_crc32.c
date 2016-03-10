@@ -100,6 +100,7 @@ uint32_t  ngx_crc32_table256[] = {
 
 
 uint32_t *ngx_crc32_table_short = ngx_crc32_table16;
+uint32_t  ngx_crc32_use_hw = 0;
 
 
 ngx_int_t
